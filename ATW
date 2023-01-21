@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Install Tor
+sudo apt-get install tor
+
+# Create a hidden service directory
+sudo mkdir /var/lib/tor/hidden_service
+
+# Set permissions for the hidden service directory
+sudo chown -R debian-tor:debian-tor /var/lib/tor/hidden_service
+sudo chmod 700 /var/lib/tor/hidden_service
+
+# Create a configuration file for the hidden service
+echo "HiddenServiceDir /var/lib/tor/hidden_service" | sudo tee -a /etc/tor/torrc
+echo "HiddenServicePort 80 127.0.0.1:80" | sudo tee -a /etc/tor/torrc
+
+# Restart the Tor service to activate the new hidden service
+sudo service tor restart
+
+# Print the onion address of the new hidden service
+cat /var/lib/tor/hidden_service/hostname
